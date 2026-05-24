@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox's Cafe</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="home-header">
+    <span class="home-logo">NOX'S CAFE</span>
+    <div class="nav-btns d-flex gap-1">
+      <button onclick="goTo('menu')">Menu</button>
+      <button onclick="goTo('cat')">Cat Lounge</button>
+      <button onclick="goTo('billiards')">Billiards</button>
+      <button onclick="goTo('about')">About</button>
+    </div>
+  </div>
+  <div class="home-page">
+    <div class="home-hero">
+      <p class="cafe-tagline">Where Coffee, Cats &amp; Cool Vibes Meet</p>
+      <h1 class="cafe-title">NOX'S CAFE</h1>
+      <p class="cafe-subtitle">Your neighborhood spot for coffee, cats &amp; billiards in Imus, Cavite.</p>
+      <button class="btn-order mb-3" onclick="goTo('menu')">ORDER NOW</button>
+      <p class="scan-text">Scan QR code or tap to start ordering</p>
+      <button class="btn-about" onclick="goTo('about')">ABOUT US &amp; LOCATION</button>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div id="menu-page" class="page">
+  <div class="menu-header">
+    <button class="btn-back" onclick="goTo('home')">← Back to Home</button>
+    <h1>NOX'S CAFE — Menu</h1>
+    <button class="btn-cart" onclick="openCart()" id="cart-btn-text">🛒 Cart (0)</button>
+  </div>
+  <div class="menu-search-wrap">
+    <div class="menu-search-inner">
+      <span class="menu-search-icon">🔍</span>
+      <input type="text" id="menu-search-input" class="menu-search-input"
+        placeholder="Search menu items…" oninput="searchMenu()">
+      <button class="menu-search-clear" id="menu-search-clear"
+        onclick="document.getElementById('menu-search-input').value='';searchMenu()" title="Clear">✕</button>
+    </div>
+  </div>
+  <div class="menu-body">
+    <div class="menu-section"><h2>☕ Espresso</h2><div class="row g-3" id="espresso-grid"></div></div>
+    <div class="menu-section"><h2>🥤 Frappes</h2><div class="row g-3" id="frappes-grid"></div></div>
+    <div class="menu-section"><h2>🍟 Finger Foods</h2><div class="row g-3" id="fingerfoods-grid"></div></div>
+    <div class="menu-section"><h2>🍵 All About Matcha</h2><div class="row g-3" id="matcha-grid"></div></div>
+    <div class="menu-section"><h2>🧃 Non-Coffee</h2><div class="row g-3" id="noncoffee-grid"></div></div>
+    <div class="menu-section"><h2>🍺 Pulutan / Viands</h2><div class="row g-3" id="pulutan-grid"></div></div>
+    <div class="menu-section"><h2>🥪 Sandwiches</h2><div class="row g-3" id="sandwiches-grid"></div></div>
+    <div class="menu-section"><h2>🍚 Rice Meals</h2><div class="row g-3" id="rice-grid"></div></div>
+    <div class="menu-section"><h2>🍝 Pastas</h2><div class="row g-3" id="pasta-grid"></div></div>
+    <div class="menu-section"><h2>🍱 Japanese Meals</h2><div class="row g-3" id="japanese-grid"></div></div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div id="cart-modal" style="display:none" class="cart-modal-overlay">
+  <div class="cart-box">
+    <div class="cart-header">
+      <h2>Your Order</h2>
+      <button class="btn-close-cart" onclick="closeCart()">×</button>
+    </div>
+    <div class="cart-items-list" id="cart-items-list"></div>
+    <div id="cart-footer" class="cart-footer-box" style="display:none">
+      <div class="cart-total-row"><span>Total:</span><span id="cart-total-amt">₱0</span></div>
+      <button class="btn-checkout" onclick="placeOrder()">PLACE ORDER</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADDED TO CART POPUP -->
+<div id="cart-pop" class="cart-pop">
+  <div class="bag-wrap">
+    <div class="bag-icon">🛍️</div>
+    <div class="bag-text">Added to Cart</div>
+  </div>
+</div>
+
+<!-- ORDER CONFIRM -->
+<div id="confirm-page" class="page">
+  <div class="confirm-wrapper">
+    <div class="confirm-box">
+      <div class="check-icon">✓</div>
+      <h1 class="confirm-title">Order Placed Successfully!</h1>
+      <div class="order-num-box">
+        <p class="order-label">Your Order Number</p>
+        <h2 class="order-num" id="conf-order-num">000000</h2>
+        <p class="order-instr">Show this number to the cashier</p>
+      </div>
+      <div class="order-summary-box">
+        <p class="summary-title">Order Summary</p>
+        <div id="conf-items"></div>
+        <div class="summary-total"><span>Total</span><span id="conf-total">₱0</span></div>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6"><button class="btn-home-conf" onclick="goTo('home')">BACK TO HOME</button></div>
+        <div class="col-6"><button class="btn-new-order" onclick="goTo('menu')">PLACE ANOTHER ORDER</button></div>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6">
+          <button class="btn-view-orders" onclick="openMyOrders()" style="width:100%;padding:0.9rem;
+            background:rgba(232,201,122,0.12);border:1px solid rgba(232,201,122,0.3);
+            color:#e8c97a;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;
+            font-size:0.9rem;cursor:pointer;transition:all 0.25s;letter-spacing:0.04em">
+            📋 MY ORDERS
+          </button>
+        </div>
+        <div class="col-6">
+          <button onclick="openMyReservations()" style="width:100%;padding:0.9rem;
+            background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);
+            color:#4ade80;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;
+            font-size:0.9rem;cursor:pointer;transition:all 0.25s;letter-spacing:0.04em">
+            🎱 MY RESERVATIONS
+          </button>
+        </div>
+      </div>
+      <div class="cafe-icons-row"><span>🐱</span><span>☕</span><span>🎱</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CAT LOUNGE -->
+<div id="cat-page" class="page">
+  <div class="inner-header">
+    <button class="btn-back" onclick="goTo('home')">← Back to Home</button>
+    <div class="nav-btns d-flex gap-1">
+      <button onclick="goTo('menu')">Menu</button>
+      <button class="active">Cat Lounge</button>
+      <button onclick="goTo('billiards')">Billiards</button>
+      <button onclick="goTo('about')">About</button>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="page-hero">
+      <h1>Cat Lounge 🐱</h1>
+      <div class="hero-img"><img src="images/cat.jpg" alt="Cat Lounge"></div>
+      <p>Welcome to Nox's Cat Lounge, where you can enjoy your favorite coffee alongside our adorable feline companions.</p>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">🐾</span><h3>Meet Our Cats</h3><p>Interact with our friendly, well-cared-for cats who love attention and playtime.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">☕</span><h3>Sip &amp; Relax</h3><p>Enjoy your favorite beverages from our extensive menu while surrounded by purring companions.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">📸</span><h3>Photo Opportunities</h3><p>Create lasting memories with plenty of Instagram-worthy moments.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">🧘</span><h3>Stress Relief</h3><p>Studies show that spending time with cats reduces stress and anxiety.</p></div></div>
+    </div>
+    <div class="guidelines-box mb-4">
+      <h2>Cat Lounge Guidelines</h2>
+      <ul>
+        <li>Please be gentle and respectful with our cats</li>
+        <li>Wash your hands before and after interacting with the cats</li>
+        <li>Let the cats come to you — don't force interaction</li>
+        <li>No flash photography to avoid startling the cats</li>
+        <li>Food and drinks must be kept in designated areas</li>
+        <li>Children must be supervised by adults at all times</li>
+      </ul>
+    </div>
+    <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+      <button class="btn-primary-nox" onclick="goTo('menu')">ORDER FOOD &amp; DRINKS</button>
+      <button class="btn-secondary-nox" onclick="goTo('about')">VISIT INFO &amp; HOURS</button>
+    </div>
+  </div>
+</div>
+
+<!-- BILLIARDS -->
+<div id="billiards-page" class="page">
+  <div class="inner-header">
+    <button class="btn-back" onclick="goTo('home')">← Back to Home</button>
+    <div class="nav-btns d-flex gap-1">
+      <button onclick="goTo('menu')">Menu</button>
+      <button onclick="goTo('cat')">Cat Lounge</button>
+      <button class="active">Billiards</button>
+      <button onclick="goTo('about')">About</button>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="page-hero">
+      <h1>Billiards Lounge 🎱</h1>
+      <div class="hero-img"><img src="images/billiards.jpg" alt="Billiards Lounge"></div>
+      <p>Step into Nox's Billiards Lounge — where classic pool meets contemporary cafe culture.</p>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">🎯</span><h3>Premium Tables</h3><p>Play on professional-grade pool tables with perfect felt and precision pockets.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">🍺</span><h3>Drinks &amp; Snacks</h3><p>Keep your energy up with our selection of beverages and snacks.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">👥</span><h3>Group Friendly</h3><p>Perfect for hanging out with friends, dates, or solo practice.</p></div></div>
+      <div class="col-md-6"><div class="feature-card"><span class="fi-icon">🎮</span><h3>All Skill Levels</h3><p>Whether you're a beginner or a pro, everyone is welcome.</p></div></div>
+    </div>
+    <div class="pricing-box mb-4">
+      <h2>Table Rates</h2>
+      <div class="row g-3">
+        <div class="col-md-4"><div class="price-card"><h3>Per Hour</h3><div class="price-num">₱200</div><p>Standard hourly rate</p></div></div>
+        <div class="col-md-4"><div class="price-card"><h3>3 Hours</h3><div class="price-num">₱500</div><p>Save ₱100</p></div></div>
+        <div class="col-md-4"><div class="price-card"><h3>All Day</h3><div class="price-num">₱1000</div><p>Unlimited play</p></div></div>
+      </div>
+    </div>
+    <div class="reservation-section">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+          <h2 class="mb-1" style="font-family:'Syne',sans-serif">Reserve a Table</h2>
+          <p class="reservation-subtitle mb-0">Book your slot in advance — pay via GCash and upload your receipt as proof.</p>
+        </div>
+        <button class="btn-reserve" onclick="openReservationModal()"><span>🎱</span> Reserve Now</button>
+      </div>
+      <div class="time-slots-preview mb-3" id="time-slots-preview"></div>
+      <div class="reservation-note">
+        <span>💳</span>
+        <div><strong>GCash Payment:</strong> Send payment to <strong>09XX-XXX-XXXX (Nox Cafe)</strong> then upload your screenshot as proof. Your reservation will be confirmed once admin approves.</div>
+      </div>
+    </div>
+    <div class="guidelines-box mb-4">
+      <h2>Lounge Guidelines</h2>
+      <ul>
+        <li>Please handle cues and equipment with care</li>
+        <li>No food or drinks on the pool tables</li>
+        <li>Keep the playing area clean and organized</li>
+        <li>Be respectful of other players and wait your turn</li>
+        <li>Tables must be reserved for continuous play</li>
+        <li>Ask staff for assistance if you need any equipment</li>
+      </ul>
+    </div>
+    <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+      <button class="btn-primary-nox" onclick="goTo('menu')">ORDER FOOD &amp; DRINKS</button>
+      <button class="btn-secondary-nox" onclick="goTo('about')">VISIT INFO &amp; HOURS</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVATION MODAL -->
+<div id="reservation-modal" class="modal-overlay-nox" style="display:none">
+  <div class="res-modal-box">
+    <div class="res-modal-header">
+      <h2>🎱 Reserve a Billiards Table</h2>
+      <button class="btn-close-modal" onclick="closeReservationModal()">×</button>
+    </div>
+    <div class="res-modal-body">
+      <div class="res-step" id="res-step-1">
+        <div class="res-step-label">Step 1 — Pick a Date</div>
+        <div class="res-field">
+          <label>Date</label>
+          <input type="date" id="res-date" onchange="loadTimeSlots()" min="">
+        </div>
+        <div class="res-step-label mt-3">Available Time Slots</div>
+        <div class="res-slots-grid" id="res-slots-grid">
+          <p class="res-slots-hint">Select a date above to see available slots.</p>
+        </div>
+        <div class="res-field mt-3">
+          <label>Duration</label>
+          <select id="res-duration">
+            <option value="1">1 Hour — ₱200</option>
+            <option value="3">3 Hours — ₱500</option>
+            <option value="all">All Day — ₱1,000</option>
+          </select>
+        </div>
+        <button class="btn-res-next" onclick="goToStep2()">Next: Your Details →</button>
+      </div>
+      <div class="res-step" id="res-step-2" style="display:none">
+        <button class="btn-res-back" onclick="goToStep1()">← Back to time slots</button>
+        <div class="res-step-label">Step 2 — Your Details &amp; Payment</div>
+        <div class="res-summary-bar" id="res-summary-bar"></div>
+
+        <!-- GCash Payment Info Banner -->
+        <div style="background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.25);
+          border-radius:10px;padding:0.85rem 1rem;margin-bottom:1rem;
+          display:flex;align-items:flex-start;gap:0.65rem">
+          <span style="font-size:1.1rem;flex-shrink:0">💳</span>
+          <div style="font-size:0.83rem;line-height:1.6;color:rgba(255,255,255,0.7)">
+            <strong style="color:#4ade80">GCash Payment:</strong>
+            Send payment to <strong style="color:#f5f5f0">09XX-XXX-XXXX</strong>
+            (Nox Cafe), then upload your screenshot below as proof.
+          </div>
+        </div>
+        <div class="res-field">
+          <label>Your Name</label>
+          <input type="text" id="res-name" placeholder="e.g. Juan dela Cruz">
+        </div>
+        <div class="res-field">
+          <label>Contact Number</label>
+          <input type="tel" id="res-contact" placeholder="e.g. 09XX-XXX-XXXX">
+        </div>
+        <div class="res-field">
+          <label>Proof of Payment (GCash screenshot)</label>
+          <div class="res-upload-area" id="res-upload-area" onclick="document.getElementById('res-payment-img').click()">
+            <div class="res-upload-placeholder" id="res-upload-placeholder">
+              <span>📷</span>
+              <p>Tap to upload your GCash receipt</p>
+              <small>JPG, PNG, WEBP accepted</small>
+            </div>
+            <img id="res-upload-preview" class="res-upload-preview" style="display:none" alt="Payment proof">
+          </div>
+          <input type="file" id="res-payment-img" accept="image/*" style="display:none" onchange="previewPaymentImg(this)">
+        </div>
+        <button class="btn-res-submit" onclick="submitReservation()">Submit Reservation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVATION SUCCESS -->
+<div id="res-success-modal" class="modal-overlay-nox" style="display:none">
+  <div class="res-success-box">
+    <div class="res-success-icon">🎱</div>
+    <h2>Reservation Submitted!</h2>
+    <p>Your reservation is <strong>pending approval</strong> from our team. We'll confirm your slot shortly.</p>
+    <div class="res-success-ref" id="res-success-ref"></div>
+    <button class="btn-res-done" onclick="closeResSuccessModal()">Done</button>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about-page" class="page">
+  <div class="inner-header">
+    <button class="btn-back" onclick="goTo('home')">← Back to Home</button>
+    <div class="nav-btns d-flex gap-1">
+      <button onclick="goTo('menu')">Menu</button>
+      <button onclick="goTo('cat')">Cat Lounge</button>
+      <button onclick="goTo('billiards')">Billiards</button>
+      <button class="active">About</button>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="page-hero">
+      <h1>About Nox Cafe</h1>
+      <div class="hero-img"><img src="images/nox.jpg" alt="Nox Cafe"></div>
+      <p>Your neighborhood spot for coffee, beers, and billiards in Imus, Cavite.</p>
+    </div>
+    <div class="story-box mb-4">
+      <h2>Our Story</h2>
+      <p>Nox Cafe was born from a simple idea: create a space where people can relax, connect, and enjoy life's simple pleasures. Whether you're a coffee enthusiast, a cat lover, or a billiards player, we've crafted a unique environment that brings together the best of all worlds.</p>
+      <p class="mb-0">Located in the heart of Imus, Cavite, we're more than just a cafe — we're a community hub where friends meet, memories are made, and every visit feels like coming home.</p>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><div class="contact-card"><div class="icon">🕐</div><h3>Hours</h3><p><strong>Monday – Friday:</strong> 7am – 11pm<br><strong>Saturday:</strong> 8am – 12am<br><strong>Sunday:</strong> 8am – 10pm</p></div></div>
+      <div class="col-md-4"><div class="contact-card"><div class="icon">📍</div><h3>Location</h3><p>Sarreal Village<br>Bucandala 2, Imus<br>Cavite, Philippines 4103</p></div></div>
+      <div class="col-md-4"><div class="contact-card"><div class="icon">📞</div><h3>Contact</h3><p>Contact us for inquiries<br><strong>Email:</strong> info@noxcafe.com<br><strong>Social:</strong> Follow us @noxcafe</p></div></div>
+    </div>
+    <h2 class="section-title">Quick Links</h2>
+    <div class="row g-3 justify-content-center mb-5" style="max-width:700px;margin-left:auto;margin-right:auto">
+      <div class="col-4"><button class="quick-link-btn" onclick="goTo('menu')"><span class="ql-icon">📋</span><span>View Menu</span></button></div>
+      <div class="col-4"><button class="quick-link-btn" onclick="goTo('cat')"><span class="ql-icon">🐱</span><span>Cat Lounge</span></button></div>
+      <div class="col-4"><button class="quick-link-btn" onclick="goTo('billiards')"><span class="ql-icon">🎱</span><span>Billiards</span></button></div>
+    </div>
+    <h2 class="section-title">Connect With Us</h2>
+    <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
+      <a href="https://www.instagram.com/noxscafe/" target="_blank"><button class="social-btn">Instagram</button></a>
+      <a href="https://www.facebook.com/NoxsCafe/" target="_blank"><button class="social-btn">Facebook</button></a>
+    </div>
+    <div class="footer-div">
+      <p>© 2026 Nox Cafe. All rights reserved.</p>
+      <p>We're open daily and ready to serve you</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
