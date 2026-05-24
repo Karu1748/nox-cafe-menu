@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nox Cafe — Admin</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin-auth.css">
+<link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7h14v9a4 4 0 01-4 4H6a4 4 0 01-4-4V7zm14 3h1a3 3 0 010 6h-1v-6zM6 1c0 1.5-2 2-2 4m4-4c0 1.5-2 2-2 4m4-4c0 1.5-2 2-2 4"/>
+        </svg>
+      </div>
+      <h1>Nox Cafe Admin</h1>
+      <p>Menu &amp; Reservation management portal</p>
+    </div>
+    <div class="login-card">
+      <div class="login-error" id="login-error">Incorrect username or password. Please try again.</div>
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+          <input type="text" id="login-user" placeholder="Enter username" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="login-pass" placeholder="Enter password" autocomplete="off">
+        </div>
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign In to Admin Panel</button>
+      <div class="cred-note">Demo credentials — Username: <span style="color:var(--accent);font-weight:600">admin</span> &nbsp;/&nbsp; Password: <span style="color:var(--accent);font-weight:600">noxcafe2026</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-badge">
+        <div class="dot"></div>
+        <h2>NOX ADMIN</h2>
+      </div>
+      <p>Management Panel</p>
+    </div>
+    <nav class="sidebar-nav">
+      <label>Main</label>
+      <button class="nav-item active" onclick="showSection('dashboard', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <label>Menu</label>
+      <button class="nav-item" onclick="showSection('menu-items', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        All Items
+        <span class="nav-badge" id="item-count-badge">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('categories', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+        Categories
+      </button>
+      <label>Billiards</label>
+      <button class="nav-item" onclick="showSection('reservations', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Reservations
+        <span class="nav-badge res-badge" id="res-count-badge" style="display:none">0</span>
+      </button>
+      <label>Orders</label>
+      <button class="nav-item" onclick="showSection('orders', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+        Customer Orders
+        <span class="nav-badge" id="orders-count-badge" style="display:none">0</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section class="admin-section active" id="section-dashboard">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Good day, Owner 👋</h1>
+          <p>Here's what's happening with your menu and reservations today.</p>
+        </div>
+      </div>
+      <div class="row g-3 mb-4" id="stats-row"></div>
+      <div class="row g-3 mb-4" id="overview-grid"></div>
+      <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <div id="activity-log">
+          <div class="activity-item">
+            <div class="act-icon add">✨</div>
+            <div class="act-text">Welcome to Nox Admin Panel<span>Your menu is ready to manage</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALL MENU ITEMS -->
+    <section class="admin-section" id="section-menu-items">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Menu Items</h1>
+          <p>Add, edit, or remove items from your menu.</p>
+        </div>
+        <button class="btn-add" onclick="openAddModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add New Item
+        </button>
+      </div>
+      <div class="d-flex gap-3 mb-3 flex-wrap">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" class="search-input" id="search-input" placeholder="Search items..." oninput="filterTable()">
+        </div>
+        <select class="filter-select" id="cat-filter" onchange="filterTable()">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+      <div class="menu-table-wrap">
+        <table class="menu-table">
+          <thead>
+            <tr><th>Image</th><th>Item Name</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="menu-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="admin-section" id="section-categories">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Categories</h1>
+          <p>Overview of all menu categories and their item counts.</p>
+        </div>
+      </div>
+      <div class="row g-3" id="cat-overview-grid"></div>
+    </section>
+
+    <!-- CUSTOMER ORDERS -->
+    <section class="admin-section" id="section-orders">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Customer Orders</h1>
+          <p>View and manage all orders placed by customers.</p>
+        </div>
+      </div>
+      <div class="row g-3 mb-3" id="order-stats-row"></div>
+      <div class="d-flex gap-2 mb-3 flex-wrap">
+        <button class="res-filter-btn active" onclick="setOrderFilter('all', this)">All</button>
+        <button class="res-filter-btn" onclick="setOrderFilter('pending', this)">⏳ Pending</button>
+        <button class="res-filter-btn" onclick="setOrderFilter('completed', this)">✅ Completed</button>
+        <button class="res-filter-btn" onclick="setOrderFilter('cancelled', this)">❌ Cancelled</button>
+      </div>
+      <div class="row g-3" id="orders-container"></div>
+    </section>
+
+    <!-- RESERVATIONS -->
+    <section class="admin-section" id="section-reservations">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Billiards Reservations</h1>
+          <p>Review proof of payment and approve or reject table bookings.</p>
+        </div>
+      </div>
+      <div class="row g-3 mb-4" id="res-stats"></div>
+      <div class="d-flex gap-2 mb-3 flex-wrap">
+        <button class="res-filter-btn active" onclick="setResFilter('all', this)">All</button>
+        <button class="res-filter-btn" onclick="setResFilter('pending', this)">⏳ Pending</button>
+        <button class="res-filter-btn" onclick="setResFilter('approved', this)">✅ Approved</button>
+        <button class="res-filter-btn" onclick="setResFilter('rejected', this)">❌ Rejected</button>
+      </div>
+      <div class="row g-3" id="res-cards-container"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modal-title">Add New Item</h2>
+      <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-field"><label>Item Name</label><input type="text" id="m-name" placeholder="e.g. Caramel Macchiato"></div>
+    <div class="row g-3">
+      <div class="col-6"><div class="modal-field"><label>Price (₱)</label><input type="number" id="m-price" placeholder="e.g. 150" min="0"></div></div>
+      <div class="col-6"><div class="modal-field"><label>Category</label><select id="m-cat"></select></div></div>
+    </div>
+    <div class="modal-field"><label>Image Path (optional)</label><input type="text" id="m-img" placeholder="e.g. images/americano.png"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="delete-confirm">
+      <div class="delete-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a1 1 0 011-1h2a1 1 0 011 1v2"/></svg>
+      </div>
+      <h2>Delete Item?</h2>
+      <p>Are you sure you want to delete <strong id="delete-item-name" style="color:var(--text)"></strong>? This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-delete-confirm" onclick="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVATION PROOF MODAL -->
+<div class="modal-overlay" id="res-proof-modal">
+  <div class="modal-box res-proof-modal-box">
+    <div class="modal-header">
+      <h2>Reservation Details</h2>
+      <button class="modal-close" onclick="closeResProofModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div id="res-proof-content"></div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="admin-auth.js"></script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
