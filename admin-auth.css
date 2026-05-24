@@ -1,0 +1,334 @@
+/* ══════════════════════════════════════════════════════════════
+   NOX CAFE ADMIN — admin-auth.css
+   Add <link rel="stylesheet" href="admin-auth.css"> to admin.html <head>
+══════════════════════════════════════════════════════════════ */
+
+/* ── Hide the demo credentials note ── */
+.cred-note { display: none !important; }
+
+/* ── Login screen — must cover everything ── */
+#login-screen {
+  z-index: 99999 !important;  /* above Bootstrap (1055) and everything else */
+}
+#login-screen.hidden {
+  display: none !important;
+}
+
+/* ── Admin app — hidden by default, shown after login ── */
+#admin-app {
+  display: none !important;
+}
+#admin-app.visible {
+  display: flex !important;
+}
+
+/* ── Prevent body scroll while login screen is showing ── */
+body:has(#login-screen:not(.hidden)) {
+  overflow: hidden;
+}
+
+/* ── Password toggle button inside login form ── */
+.pw-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(240, 239, 232, 0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  z-index: 2;
+}
+.pw-toggle-btn:hover { color: rgba(240, 239, 232, 0.7); }
+
+/* ── Strength bar (login form) ── */
+.admin-pw-strength-wrap { margin-top: 0.55rem; }
+.admin-pw-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0.45rem;
+}
+.admin-pw-seg {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  transition: background 0.3s;
+}
+.admin-pw-seg.s1 { background: #e05c5c; }
+.admin-pw-seg.s2 { background: #e0944a; }
+.admin-pw-seg.s3 { background: #e8c97a; }
+.admin-pw-seg.s4 { background: #4ade80; }
+
+.admin-pw-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.75rem;
+}
+.admin-pw-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  color: rgba(240, 239, 232, 0.3);
+  transition: color 0.25s;
+}
+.admin-pw-rule.met { color: #4ade80; }
+.admin-pw-rule .rule-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.admin-pw-rule.met .rule-dot {
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74,222,128,0.5);
+}
+
+/* ── Input valid/invalid states ── */
+.form-group input.inp-valid {
+  border-color: rgba(74,222,128,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.07) !important;
+}
+.form-group input.inp-invalid {
+  border-color: rgba(224,92,92,0.55) !important;
+  box-shadow: 0 0 0 3px rgba(224,92,92,0.08) !important;
+}
+
+/* ══════════════════════════════════════
+   SETTINGS SECTION
+══════════════════════════════════════ */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+.settings-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  animation: fadeUp 0.45s ease both;
+}
+.settings-card-title {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+.settings-card-sub {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.settings-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.25rem 0;
+}
+.settings-field {
+  margin-bottom: 1.1rem;
+}
+.settings-field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+.settings-input-wrap { position: relative; }
+.settings-input-wrap input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.7rem 2.5rem 0.7rem 0.9rem !important;
+  color: var(--text) !important;
+  font-size: 0.9rem;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: var(--font-body);
+  background-color: var(--surface) !important;
+}
+.settings-input-wrap input:focus {
+  border-color: rgba(232,201,122,0.45) !important;
+  box-shadow: 0 0 0 3px rgba(232,201,122,0.08) !important;
+}
+.settings-input-wrap input::placeholder { color: var(--muted2); }
+.settings-input-wrap input.s-valid {
+  border-color: rgba(74,222,128,0.45) !important;
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.07) !important;
+}
+.settings-input-wrap input.s-invalid {
+  border-color: rgba(224,92,92,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(224,92,92,0.07) !important;
+}
+.settings-toggle-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  z-index: 2;
+}
+.settings-toggle-btn:hover { color: var(--text); }
+
+/* Strength bar inside settings */
+.s-pw-strength-wrap { margin-top: 0.5rem; display: none; }
+.s-pw-bar { display: flex; gap: 4px; margin-bottom: 0.4rem; }
+.s-pw-seg {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  transition: background 0.3s;
+}
+.s-pw-seg.s1 { background: #e05c5c; }
+.s-pw-seg.s2 { background: #e0944a; }
+.s-pw-seg.s3 { background: #e8c97a; }
+.s-pw-seg.s4 { background: #4ade80; }
+
+.s-pw-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.75rem;
+}
+.s-pw-rule {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.73rem; color: var(--muted); transition: color 0.25s;
+}
+.s-pw-rule.met { color: #4ade80; }
+.s-pw-rule .rule-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); flex-shrink: 0;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.s-pw-rule.met .rule-dot {
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74,222,128,0.5);
+}
+
+/* Settings error/success */
+.settings-msg {
+  font-size: 0.82rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  display: none;
+}
+.settings-msg.show { display: block; }
+.settings-msg.error {
+  background: rgba(224,92,92,0.1);
+  border: 1px solid rgba(224,92,92,0.3);
+  color: #e05c5c;
+}
+.settings-msg.success {
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.25);
+  color: #4ade80;
+}
+
+.btn-settings-save {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #0c0c0e;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 2px 12px rgba(232,201,122,0.25);
+  margin-top: 0.5rem;
+}
+.btn-settings-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232,201,122,0.4);
+}
+.btn-settings-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Dashboard & Reservation cards side-by-side fix ──
+   Bootstrap col classes handle layout but we ensure
+   the card grids use the correct Bootstrap row setup */
+#stats-row,
+#overview-grid,
+#res-stats {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0;       /* Bootstrap g-3 handles gap via padding */
+}
+
+/* Each stat/overview card fills its Bootstrap column */
+#stats-row .stat-card,
+#overview-grid .overview-card {
+  width: 100%;
+  height: 100%;
+}
+
+/* Reservation stat cards — 4 across */
+#res-stats .res-stat-card {
+  width: 100%;
+}
+
+/* Reservation booking cards — side-by-side grid */
+#res-cards-container {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+#res-cards-container .res-card-col {
+  flex: 1 1 300px;
+  min-width: 280px;
+  max-width: calc(50% - 0.5rem);
+}
+
+/* Current credentials display */
+.current-cred-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cred-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+.cred-row span { color: var(--muted); }
+.cred-row strong { color: var(--text); font-family: var(--font-head); }
+
+@media (max-width: 600px) {
+  .settings-grid { grid-template-columns: 1fr; }
+  .admin-pw-rules, .s-pw-rules { grid-template-columns: 1fr; }
+  #res-cards-container .res-card-col {
+    max-width: 100%;
+  }
+}
